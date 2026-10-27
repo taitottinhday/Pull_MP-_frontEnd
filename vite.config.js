@@ -3,66 +3,61 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(() => {
-  const isVercelPreview = process.env.VERCEL_ENV === "preview";
-  const enablePWA = !isVercelPreview;
-
   return {
     plugins: [
       react({
         jsxRuntime: "automatic",
       }),
 
-      enablePWA
-        ? VitePWA({
-            registerType: "autoUpdate",
-            injectRegister: false,
-            includeAssets: [
-              "favicon-brand.ico",
-              "favicon-brand-96x96.png",
-              "favicon.svg",
-              "apple-touch-icon-brand.png",
-              "favicon.ico",
-              "site.webmanifest",
-            ],
+      VitePWA({
+        registerType: "autoUpdate",
+        injectRegister: false,
+        includeAssets: [
+          "favicon-brand.ico",
+          "favicon-brand-96x96.png",
+          "favicon.svg",
+          "apple-touch-icon-brand.png",
+          "favicon.ico",
+          "site.webmanifest",
+        ],
 
-            manifest: {
-              name: "Khoaluan Music Platform",
-              short_name: "Khoaluan",
-              description: "Music streaming platform",
-              start_url: "/",
-              display: "standalone",
-              orientation: "portrait",
-              background_color: "#050705",
-              theme_color: "#050705",
+        manifest: {
+          name: "Khoaluan Music Platform",
+          short_name: "Khoaluan",
+          description: "Music streaming platform",
+          start_url: "/",
+          display: "standalone",
+          orientation: "portrait",
+          background_color: "#050705",
+          theme_color: "#050705",
 
-              icons: [
-                {
-                  src: "/web-app-manifest-192x192.png",
-                  sizes: "192x192",
-                  type: "image/png",
-                  purpose: "maskable",
-                },
-                {
-                  src: "/web-app-manifest-512x512.png",
-                  sizes: "512x512",
-                  type: "image/png",
-                  purpose: "maskable",
-                },
-              ],
+          icons: [
+            {
+              src: "/web-app-manifest-192x192.png",
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "maskable",
             },
-
-            workbox: {
-              globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-              navigateFallbackDenylist: [
-                /\/[^/?]+\.[^/]+(?:\?.*)?$/,
-                /^\/registerSW\.js$/,
-                /^\/sw\.js$/,
-                /^\/workbox-.*\.js$/,
-              ],
+            {
+              src: "/web-app-manifest-512x512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
             },
-          })
-        : null,
-    ].filter(Boolean),
+          ],
+        },
+
+        workbox: {
+          globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+          navigateFallbackDenylist: [
+            /\/[^/?]+\.[^/]+(?:\?.*)?$/,
+            /^\/registerSW\.js$/,
+            /^\/sw\.js$/,
+            /^\/workbox-.*\.js$/,
+          ],
+        },
+      }),
+    ],
     server: {
       proxy: {
         "/__firebase-storage-proxy": {

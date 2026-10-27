@@ -55,8 +55,8 @@ function PlayerDetailLyrics({
 
   useEffect(() => {
     if (!songId) return;
-    ensureLyricsLoaded(songId);
-  }, [ensureLyricsLoaded, songId]);
+    ensureLyricsLoaded(currentSong);
+  }, [currentSong, ensureLyricsLoaded, songId]);
 
   useEffect(() => {
     const audio = usePlayerStore.getState().audio;

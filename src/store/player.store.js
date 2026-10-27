@@ -9,6 +9,7 @@ import { getArtistLabel } from "../utils/artist";
 import useAuthStore from "./auth.store";
 import usePlaybackSessionStore from "./playback-session.store";
 import { emitAuthRequired } from "../utils/authPrompt";
+import { getOfflineLyrics, saveOfflineLyrics } from "../utils/offlineLyrics";
 
 /* =====================
    HELPERS
@@ -840,6 +841,16 @@ const usePlayerStore = create((set, get) => ({
     const songId = normalizeSongId(songOrId);
     if (!songId) return [];
 
+    const offlineLyrics = getOfflineLyrics(songId);
+    if (typeof navigator !== "undefined" && !navigator.onLine && offlineLyrics) {
+      set((state) => ({
+        lyricsBySongId: { ...state.lyricsBySongId, [songId]: offlineLyrics },
+        lyricsLoadingBySongId: { ...state.lyricsLoadingBySongId, [songId]: false },
+        lyricsErrorBySongId: { ...state.lyricsErrorBySongId, [songId]: null },
+      }));
+      return offlineLyrics;
+    }
+
     const { lyricsBySongId, lyricsLoadingBySongId } = get();
     const hasCachedLyrics = Object.prototype.hasOwnProperty.call(
       lyricsBySongId,
@@ -870,6 +881,13 @@ const usePlayerStore = create((set, get) => ({
     const request = getSongLyrics(songId)
       .then((response) => {
         const items = extractLyricsFromResponse(response);
+        const songForOffline =
+          typeof songOrId === "object"
+            ? songOrId
+            : normalizeSongId(get().currentSong) === songId
+              ? get().currentSong
+              : null;
+        saveOfflineLyrics(songId, items, songForOffline);
 
         set((state) => ({
           lyricsBySongId: {
@@ -890,6 +908,24 @@ const usePlayerStore = create((set, get) => ({
       })
       .catch((error) => {
         console.error("Load song lyrics failed", error);
+
+        if (offlineLyrics) {
+          set((state) => ({
+            lyricsBySongId: {
+              ...state.lyricsBySongId,
+              [songId]: offlineLyrics,
+            },
+            lyricsLoadingBySongId: {
+              ...state.lyricsLoadingBySongId,
+              [songId]: false,
+            },
+            lyricsErrorBySongId: {
+              ...state.lyricsErrorBySongId,
+              [songId]: null,
+            },
+          }));
+          return offlineLyrics;
+        }
 
         set((state) => ({
           lyricsLoadingBySongId: {

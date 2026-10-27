@@ -20,16 +20,7 @@ function shouldRegisterServiceWorker() {
 export function registerAppServiceWorker() {
   if (!shouldRegisterServiceWorker()) return;
 
-  const register = () => {
-    void navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
-      // Ignore registration failures in unsupported or constrained environments.
-    });
-  };
-
-  if (document.readyState === "complete") {
-    register();
-    return;
-  }
-
-  window.addEventListener("load", register, { once: true });
+  void navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
+    // Ignore registration failures in unsupported or constrained environments.
+  });
 }

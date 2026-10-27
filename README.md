@@ -162,7 +162,7 @@ Luồng `npm run build` của dự án không chỉ build frontend mà còn ch�
 Một số lưu ý khi deploy:
 
 - Dự án đã có sẵn rewrite/redirect trong [`vercel.json`](./vercel.json).
-- PWA được bật ở production và tự tắt trong môi trường `Vercel Preview`.
+- PWA được bật ở production và `Vercel Preview` để hỗ trợ mở giao diện khi offline.
 - Có proxy cho Firebase Storage qua đường dẫn `/__firebase-storage-proxy`.
 
 ## Tài liệu liên quan

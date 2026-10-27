@@ -274,6 +274,12 @@ export default function Sidebar({ isOpen, onClose, isArtistWorkspace = false }) 
                   collapsed={isCompact}
                 />
                 <SidebarItem to="/top-50" icon={MdLibraryMusic} label="Top 50" collapsed={isCompact} />
+                <SidebarItem
+                  to="/offline-lyrics"
+                  icon={MdLibraryMusic}
+                  label="Lời đã lưu offline"
+                  collapsed={isCompact}
+                />
               </SidebarSection>
 
               {isAuthenticated ? (

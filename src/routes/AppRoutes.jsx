@@ -66,6 +66,7 @@ const AdminArtistRequests = lazy(() =>
 );
 const AdminUserForm = lazy(() => import("../pages/admin/AdminUserForm"));
 const Trash = lazy(() => import("../pages/Trash"));
+const OfflineLyrics = lazy(() => import("../pages/OfflineLyrics"));
 
 const fallback = null;
 
@@ -101,6 +102,7 @@ export default function AppRoutes() {
           <Route
             element={<ProtectedRoute allowGuests allowedRoles={["USER", "ARTIST", "ADMIN"]} />}
           >
+            <Route path="/offline-lyrics" element={<OfflineLyrics />} />
             <Route path="/" element={<HomeEntryRoute />} />
           </Route>
 
